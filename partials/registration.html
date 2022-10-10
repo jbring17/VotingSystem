@@ -26,7 +26,7 @@
                     <input type="password" class="form-control w-50 m-auto" name="cpassword" placeholder="Confirm Your Password" required="required">
                 </div>
                 <div class="mb-3">
-                    <input type="file" class="form-control w-50 m-auto" name="photo">
+                    <input id="file" type="file" class="form-control w-50 m-auto" name="photo">
                 </div>
                 <div class="mb-3">
                     <select class="form-select w-50 m-auto" name="std">
@@ -44,11 +44,18 @@
             $('#register').on('submit', function(e) {
                 e.preventDefault();
 
+                var fd = new FormData(this);
+                var files = $('#file')[0].files[0];
+                fd.append('file',files);
+
                 let error = $('#error');
+
                 $.ajax({
                     type: 'POST',
                     url: '../actions/register.php',
-                    data: $(this).serialize()
+                    data: fd,
+                    contentType: false,
+                    processData: false
                 }).then(function(response) {
                     let data = JSON.parse(response);
                     if (data.error) {
