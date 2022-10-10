@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browser Voting System</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!--BootStrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
@@ -14,7 +14,8 @@
     <div class="bg-info py-4">
         <h2 class="text-center">Login</h2>
         <div class="container text-center">
-            <form action="./actions/login.php" method="POST">
+            <form id="login">
+                <div id="error" class="alert alert-danger d-none"></div>
                 <div class="mb-3">
                     <input type="text" class="form-control w-50 m-auto" name="username" placeholder="Enter Username" required="required">
                 </div>
@@ -33,5 +34,28 @@
             </form>
         </div>
     </div>
+    <script>
+        $(function() {
+            $('#login').on('submit', function(e) {
+                e.preventDefault();
+
+                let error = $('#error');
+                $.ajax({
+                    type: 'POST',
+                    url: './actions/login.php',
+                    data: $(this).serialize()
+                }).then(function(response) {
+                    let data = JSON.parse(response);
+                    if (data.error) {
+                        error.removeClass('d-none').html(data.error);
+                        return;
+                    }
+                    location.href = data.dashboard;
+                }).fail(function(response) {
+                    error.removeClass('d-none').html('Error attempting to sign in.');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

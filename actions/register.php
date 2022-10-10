@@ -8,11 +8,11 @@
     $tmp_name=$_FILES['photo']['tmp_name'];
     $std=$_POST['std'];
 
-    if ($password != $cpassword) {
-        echo '<script>
-        alert("Passwords do not match");
-        window.location="../partials/registration.html";
-        </script>';
+    if ($username == '') {
+        echo json_encode(['error' => 'Attempting to directly access the page.']);
+    }
+    else if ($password != $cpassword) {
+        echo json_encode(['error' => 'Passwords do not match.']);
     } 
     else {
         if ($std == 'voter') {
@@ -21,10 +21,7 @@
             $user = mysqli_fetch_assoc($result);
 
             if ($user) { // if user exists
-                echo '<script>
-                alert("Username already taken.");
-                window.location="../partials/registration.html";
-                </script>';
+                echo json_encode(['error' => 'Username taken.']);
             } 
             else {
                 move_uploaded_file($tmp_name,"../uploads/$image");
@@ -35,10 +32,7 @@
                 $result = mysqli_query($conn, $sql);
             
                 if ($result) {
-                    echo '<script>
-                    alert("Registration Successful");
-                    window.location="../";
-                    </script>';
+                    echo json_encode(['login' => '../']);
                 }
             }
         }
@@ -48,10 +42,7 @@
             $group = mysqli_fetch_assoc($result);
 
             if ($group) { // if group exists
-                echo '<script>
-                alert("Username already taken.");
-                window.location="../partials/registration.html";
-                </script>';
+                echo json_encode(['error' => 'Username taken.']);
             } 
             else {
                 move_uploaded_file($tmp_name,"../uploads/$image");
@@ -62,10 +53,7 @@
                 $result = mysqli_query($conn, $sql);
             
                 if ($result) {
-                    echo '<script>
-                    alert("Registration Successful");
-                    window.location="../";
-                    </script>';
+                    echo json_encode(['login' => '../']);
                 }
             }
         }
