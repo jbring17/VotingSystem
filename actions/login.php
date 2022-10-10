@@ -29,15 +29,10 @@
             $_SESSION['std'] = 'voter';
             $_SESSION['data'] = $data;
             
-            echo '<script>
-            window.location="../partials/user-dashboard.php";
-            </script>';
+            echo json_encode(['dashboard' => './partials/user-dashboard.php']);
         }
         else {
-            echo '<script>
-            alert("Invalid Credentials");
-            window.location="../";
-            </script>'; 
+            echo json_encode(['error' => 'Invalid Credentials']);
         }
     }
     else {
@@ -51,15 +46,10 @@
             $_SESSION['std'] = 'group';
             $_SESSION['data'] = $data;
 
-            echo '<script>
-            window.location="../partials/group-dashboard.php";
-            </script>';
+            echo json_encode(['dashboard' => './partials/group-dashboard.php']);
         }
         else {
-            echo '<script>
-            alert("Invalid Credentials");
-            window.location="../";
-            </script>'; 
+            echo json_encode(['error' => 'Invalid Credentials']);
         }
     }
 ?>

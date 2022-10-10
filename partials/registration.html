@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voting System Registration</title>
-
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
     <!--BootStrap Link -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
@@ -14,8 +14,9 @@
     <div class="bg-info py-4">
         <h2 class="text-center">Register Account</h2>
         <div class="container text-center">
-            <form action="../actions/register.php" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
+            <form id="register" enctype="multipart/form-data">
+                <div id="error" class="alert alert-danger d-none"></div>
+                <div class="mb-3">
                     <input type="text" class="form-control w-50 m-auto" name="username" placeholder="Enter Your Username" required="required">
                 </div>
                 <div class="mb-3">
@@ -38,5 +39,28 @@
             </form>
         </div>
     </div>
+    <script>
+        $(function() {
+            $('#register').on('submit', function(e) {
+                e.preventDefault();
+
+                let error = $('#error');
+                $.ajax({
+                    type: 'POST',
+                    url: '../actions/register.php',
+                    data: $(this).serialize()
+                }).then(function(response) {
+                    let data = JSON.parse(response);
+                    if (data.error) {
+                        error.removeClass('d-none').html(data.error);
+                        return;
+                    }
+                    location.href = data.login;
+                }).fail(function(response) {
+                    error.removeClass('d-none').html('Error attempting to register.');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
